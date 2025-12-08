@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teocruel - {{ _('网络爬虫') }}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 头部区域 */
+        .header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        /* 主体内容 */
+        .content {
+            padding: 40px;
+        }
+        
+        /* 语言选择器 */
+        .lang-selector {
+            margin-bottom: 30px;
+            text-align: right;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .lang-selector a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .lang-selector a:hover {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group:focus-within label {
+            color: #007bff;
+            transform: translateX(5px);
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px 20px;
+            box-sizing: border-box;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background-color: #fafafa;
+            position: relative;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1), 0 5px 20px rgba(0, 123, 255, 0.15);
+            background-color: white;
+            transform: translateY(-2px);
+        }
+        
+        .form-group input:valid, .form-group textarea:valid {
+            border-color: #28a745;
+        }
+        
+        .form-group input:invalid, .form-group textarea:invalid {
+            border-color: #dc3545;
+        }
+        
+        /* 表单输入图标 */
+        .form-group::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 65%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .form-group:focus-within::before {
+            opacity: 0.7;
+        }
+        
+        .form-group:nth-child(1)::before { /* URL输入框 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'/%3E%3C/svg%3E");
+        }
+        
+        .form-group:nth-child(2)::before, /* 深度输入框 */
+        .form-group:nth-child(3)::before { /* 最大爬取数量输入框 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E");
+        }
+        
+        .form-group:nth-child(4)::before { /* 导出目录输入框 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h5.17l2 2H20v8zm-10-3h8v-2h-8v2zm0-4h8V9h-8v2zm-2-5h2v3h-2V6z'/%3E%3C/svg%3E");
+        }
+        
+        .form-group:nth-child(5)::before { /* 描述输入框 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E");
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        /* 任务状态区域 */
+        #task-status {
+            margin-top: 40px;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 123, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #task-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #007bff 0%, #764ba2 100%);
+            animation: statusBarGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes statusBarGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        #task-status h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        #task-status h3::before {
+            content: '📋';
+            margin-right: 12px;
+            font-size: 1.8rem;
+        }
+        
+        #status-message {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #007bff;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #task-results {
+            padding: 25px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        #task-results h4 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        #task-results h4::before {
+            content: '📊';
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        /* 结果表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 0.95rem;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+        
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f3f5;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        table tbody tr {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: translateX(3px);
+            border-left-color: #007bff;
+        }
+        
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* 表格行号 */
+        table tbody td:first-child::before {
+            content: counter(row-counter);
+            counter-increment: row-counter;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #e3f2fd;
+            color: #007bff;
+            text-align: center;
+            line-height: 24px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-right: 10px;
+        }
+        
+        table tbody {
+            counter-reset: row-counter;
+        }
+        
+        table a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        table a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        
+        /* JSON 预览样式 */
+        pre {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 123, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #007bff;
+            animation: spin 0.8s linear infinite;
+            margin-right: 12px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 状态消息样式 */
+        .status-info {
+            color: #0056b3;
+            background-color: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #0056b3;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 86, 179, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-info::before {
+            content: 'ℹ️';
+            margin-right: 12px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .status-success {
+            color: #155724;
+            background-color: #d4edda;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #155724;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(21, 87, 36, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-success::before {
+            content: '✅';
+            margin-right: 12px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .status-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #856404;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(133, 100, 4, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-warning::before {
+            content: '⚠️';
+            margin-right: 12px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .status-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #721c24;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(114, 28, 36, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-error::before {
+            content: '❌';
+            margin-right: 12px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        /* 状态消息动画 */
+        .status-info, .status-success, .status-warning, .status-error {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* JSON 预览样式 */
+        pre {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #2d3748;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border: 1px solid #4a5568;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        pre::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        pre::-webkit-scrollbar-track {
+            background: #2d3748;
+            border-radius: 4px;
+        }
+        
+        pre::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+        
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .lang-selector {
+                text-align: center;
+                border-bottom: none;
+                padding: 0 0 20px 0;
+            }
+            
+            .lang-selector a {
+                margin: 5px 8px;
+                display: inline-block;
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+            
+            .form-group {
+                margin-bottom: 25px;
+            }
+            
+            .form-group input, .form-group textarea {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+            
+            .btn {
+                padding: 14px 30px;
+                font-size: 1rem;
+            }
+            
+            table {
+                font-size: 0.85rem;
+            }
+            
+            table th, table td {
+                padding: 12px 15px;
+            }
+            
+            #task-status {
+                padding: 20px;
+            }
+            
+            #status-message, #task-results {
+                padding: 15px;
+            }
+            
+            /* 响应式状态消息 */
+            .status-info, .status-success, .status-warning, .status-error {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+            
+            .status-info::before, .status-success::before, 
+            .status-warning::before, .status-error::before {
+                font-size: 1.2rem;
+                margin-right: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .lang-selector a {
+                margin: 4px;
+                padding: 5px 10px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 焦点状态优化 */
+        *:focus {
+            outline: none;
+        }
+        
+        /* 选中文本样式 */
+        ::selection {
+            background-color: rgba(0, 123, 255, 0.2);
+        }
+        
+        /* 作者区域样式 */
+        .author-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .author-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .author-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .author-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .author-info {
+            text-align: center;
+        }
+        
+        .author-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .author-emails {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+        
+        .author-emails a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .author-emails a:hover {
+            border-bottom-color: white;
+            opacity: 1;
+        }
+        
+        /* 响应式作者区域 */
+        @media (max-width: 768px) {
+            .author-section {
+                padding: 25px;
+                margin-top: 30px;
+            }
+            
+            .author-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .author-name {
+                font-size: 1.5rem;
+            }
+            
+            .author-emails {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部区域 -->
+        <div class="header">
+            <h1>Teocruel</h1>
+            <p>{{ _('功能强大的多语言网络爬虫') }}</p>
+        </div>
+        
+        <!-- 主体内容 -->
+        <div class="content">
+            <!-- 语言选择器 -->
+            <div class="lang-selector">
+                <a href="{{ url_for('set_language', lang='zh') }}" {% if get_locale() == 'zh' %}style="font-weight: bold; background-color: #007bff; color: white;"{% endif %}>中文</a>
+                <a href="{{ url_for('set_language', lang='en') }}" {% if get_locale() == 'en' %}style="font-weight: bold; background-color: #007bff; color: white;"{% endif %}>English</a>
+                <a href="{{ url_for('set_language', lang='ja') }}" {% if get_locale() == 'ja' %}style="font-weight: bold; background-color: #007bff; color: white;"{% endif %}>日本語</a>
+                <a href="{{ url_for('set_language', lang='fr') }}" {% if get_locale() == 'fr' %}style="font-weight: bold; background-color: #007bff; color: white;"{% endif %}>Français</a>
+                <a href="{{ url_for('set_language', lang='es') }}" {% if get_locale() == 'es' %}style="font-weight: bold; background-color: #007bff; color: white;"{% endif %}>Español</a>
+            </div>
+            
+            <!-- 爬虫配置表单 -->
+            <form id="spider-form">
+                <div class="form-group">
+                    <label for="url">{{ _('目标URL') }}</label>
+                    <input type="url" id="url" name="url" required placeholder="https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="depth">{{ _('爬取深度') }}</label>
+                    <input type="number" id="depth" name="depth" min="1" max="10" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="max_items">{{ _('最大爬取数量') }}</label>
+                    <input type="number" id="max_items" name="max_items" min="1" max="1000" value="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="output_dir">{{ _('导出目录') }}</label>
+                    <input type="text" id="output_dir" name="output_dir" value="temp" placeholder="temp">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">{{ _('描述') }}</label>
+                    <textarea id="description" name="description" rows="3" placeholder="{{ _('输入爬取任务描述') }}"></textarea>
+                </div>
+                
+                <button type="submit" class="btn" id="submit-btn">{{ _('开始爬取') }}</button>
+            </form>
+            
+            <!-- 任务状态显示区域 -->
+            <div id="task-status" style="margin-top: 20px; display: none;">
+                <h3>{{ _('任务状态') }}</h3>
+                <div id="status-message"></div>
+                <div id="task-results" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+        
+        <script>
+            // 添加表单验证的实时反馈
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('spider-form');
+                const urlInput = document.getElementById('url');
+                const depthInput = document.getElementById('depth');
+                const maxItemsInput = document.getElementById('max_items');
+                const outputDirInput = document.getElementById('output_dir');
+                
+                // URL验证
+                urlInput.addEventListener('input', function() {
+                    if (this.validity.valid) {
+                        this.style.borderColor = '#28a745';
+                        this.style.boxShadow = '0 0 0 4px rgba(40, 167, 69, 0.1)';
+                    } else if (this.value) {
+                        this.style.borderColor = '#dc3545';
+                        this.style.boxShadow = '0 0 0 4px rgba(220, 53, 69, 0.1)';
+                    } else {
+                        this.style.borderColor = '#e9ecef';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+                
+                // 数字输入验证
+                [depthInput, maxItemsInput].forEach(input => {
+                    input.addEventListener('input', function() {
+                        const value = parseInt(this.value);
+                        const min = parseInt(this.min);
+                        const max = parseInt(this.max);
+                        
+                        if (value >= min && value <= max) {
+                            this.style.borderColor = '#28a745';
+                            this.style.boxShadow = '0 0 0 4px rgba(40, 167, 69, 0.1)';
+                        } else if (this.value) {
+                            this.style.borderColor = '#dc3545';
+                            this.style.boxShadow = '0 0 0 4px rgba(220, 53, 69, 0.1)';
+                        } else {
+                            this.style.borderColor = '#e9ecef';
+                            this.style.boxShadow = 'none';
+                        }
+                    });
+                });
+                
+                // 导出目录输入验证
+                outputDirInput.addEventListener('input', function() {
+                    if (this.value) {
+                        this.style.borderColor = '#28a745';
+                        this.style.boxShadow = '0 0 0 4px rgba(40, 167, 69, 0.1)';
+                    } else {
+                        this.style.borderColor = '#dc3545';
+                        this.style.boxShadow = '0 0 0 4px rgba(220, 53, 69, 0.1)';
+                    }
+                });
+            });
+            
+            // 表单提交处理
+            document.getElementById('spider-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submit-btn');
+                const statusDiv = document.getElementById('task-status');
+                const statusMsg = document.getElementById('status-message');
+                const taskResults = document.getElementById('task-results');
+                
+                // 禁用提交按钮并显示加载动画
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="loading"></span>{{ _('爬取中...') }}';
+                
+                // 清空之前的状态和结果
+                statusDiv.style.display = 'block';
+                statusDiv.style.opacity = '0';
+                statusDiv.style.transition = 'opacity 0.5s ease';
+                
+                // 添加淡入效果
+                setTimeout(() => {
+                    statusDiv.style.opacity = '1';
+                }, 100);
+                
+                statusMsg.innerHTML = '<div class="status-info"><span class="loading"></span>{{ _('正在提交爬虫任务...') }}</div>';
+                taskResults.innerHTML = '';
+                
+                // 收集表单数据
+                const formData = new FormData(this);
+                
+                // 发送AJAX请求
+                fetch('/run_spider', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        statusMsg.innerHTML = `
+                            <div class="status-success">
+                                <strong>{{ _('成功！') }}</strong> ${data.message}
+                            </div>
+                            <div class="status-info">
+                                <strong>{{ _('任务ID') }}:</strong> ${data.task_id}
+                            </div>
+                        `;
+                        
+                        // 轮询任务状态
+                        let checkCount = 0;
+                        const checkInterval = setInterval(() => {
+                            checkCount++;
+                            
+                            fetch(`/task_status/${data.task_id}`)
+                            .then(res => {
+                                if (!res.ok) {
+                                    throw new Error(`HTTP error! status: ${res.status}`);
+                                }
+                                return res.json();
+                            })
+                            .then(taskData => {
+                                if (taskData.status === 'completed') {
+                                    clearInterval(checkInterval);
+                                    statusMsg.innerHTML += `
+                                        <div class="status-success">
+                                            <strong>{{ _('完成！') }}</strong> {{ _('爬虫任务已完成！') }}
+                                        </div>
+                                    `;
+                                    
+                                    // 显示结果
+                                    if (taskData.results) {
+                                        // 检查结果是否为数组或对象
+                                        let resultsHtml = '';
+                                        if (Array.isArray(taskData.results)) {
+                                            // 如果是数组，显示项目列表
+                                            resultsHtml = `
+                                                <h4>{{ _('爬取结果') }} (${taskData.results.length} {{ _('个项目') }})</h4>
+                                                <div style="max-height: 400px; overflow-y: auto;">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>{{ _('标题') }}</th>
+                                                                <th>{{ _('URL') }}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            ${taskData.results.map(item => `
+                                                                <tr>
+                                                                    <td>${item.title || '{{ _('无标题') }}'}</td>
+                                                                    <td><a href="${item.url}" target="_blank">${item.url}</a></td>
+                                                                </tr>
+                                                            `).join('')}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            `;
+                                        } else {
+                                            // 如果是对象，显示JSON
+                                            resultsHtml = `
+                                                <h4>{{ _('爬取结果') }}</h4>
+                                                <pre>
+                                                    ${JSON.stringify(taskData.results, null, 2)}
+                                                </pre>
+                                            `;
+                                        }
+                                        
+                                        // 添加结果展示动画
+                                        taskResults.innerHTML = resultsHtml;
+                                        taskResults.style.opacity = '0';
+                                        taskResults.style.transform = 'translateY(20px)';
+                                        taskResults.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                        
+                                        setTimeout(() => {
+                                            taskResults.style.opacity = '1';
+                                            taskResults.style.transform = 'translateY(0)';
+                                        }, 100);
+                                    }
+                                    
+                                    // 启用提交按钮
+                                    submitBtn.disabled = false;
+                                    submitBtn.innerHTML = '{{ _('开始爬取') }}';
+                                } else {
+                                    // 显示进度信息
+                                    const progressText = checkCount % 3 === 0 ? '{{ _('正在爬取数据...') }}' : 
+                                                       checkCount % 3 === 1 ? '{{ _('处理结果...') }}' : 
+                                                       '{{ _('分析页面内容...') }}';
+                                    
+                                    statusMsg.innerHTML = `
+                                        <div class="status-warning">
+                                            <span class="loading"></span> ${taskData.message} ${progressText}
+                                        </div>
+                                        <div class="status-info">
+                                            <strong>{{ _('任务ID') }}:</strong> ${data.task_id}
+                                            <br>
+                                            <strong>{{ _('运行时间') }}:</strong> ${Math.floor(checkCount * 2)} {{ _('秒') }}
+                                        </div>
+                                    `;
+                                }
+                            })
+                            .catch(error => {
+                                clearInterval(checkInterval);
+                                statusMsg.innerHTML += `
+                                    <div class="status-error">
+                                        <strong>{{ _('错误：') }}</strong>{{ _('检查任务状态时出错') }}: ${error.message}
+                                    </div>
+                                `;
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = '{{ _('开始爬取') }}';
+                            });
+                        }, 2000); // 每2秒检查一次
+                    } else {
+                        statusMsg.innerHTML = `
+                            <div class="status-error">
+                                <strong>{{ _('错误：') }}</strong>{{ _('提交任务失败') }}: ${data.message || '{{ _('未知错误') }}'}
+                            </div>
+                        `;
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '{{ _('开始爬取') }}';
+                    }
+                })
+                .catch(error => {
+                    statusMsg.innerHTML = `
+                        <div class="status-error">
+                            <strong>{{ _('错误：') }}</strong>{{ _('提交任务时出错') }}: ${error.message}
+                        </div>
+                    `;
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '{{ _('开始爬取') }}';
+                });
+            });
+        </script>
+        
+        <!-- 作者信息区域 -->
+        <div class="author-section">
+            <div class="author-content">
+                <div class="author-avatar">
+                    <img src="/static/assets/PROF.svg" alt="Author Avatar">
+                </div>
+                <div class="author-info">
+                    <div class="author-name">ceaserzhao</div>
+                    <div class="author-emails">
+                        <a href="mailto:zhaoceaser@gmail.com">zhaoceaser@gmail.com</a><br>
+                        <a href="mailto:thefounder@oermos.com">thefounder@oermos.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

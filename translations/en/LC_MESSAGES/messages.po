@@ -1,0 +1,154 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-12-08 18:35+0800\n"
+"PO-Revision-Date: 2025-12-07 22:24+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app.py:90
+msgid "请提供有效的URL"
+msgstr ""
+
+#: app.py:110
+msgid "创建导出目录失败"
+msgstr ""
+
+#: app.py:158
+msgid "爬虫已开始运行"
+msgstr ""
+
+#: app.py:164
+msgid "启动爬虫失败"
+msgstr ""
+
+#: app.py:177
+msgid "任务不存在或已被删除"
+msgstr ""
+
+#: app.py:199 app.py:210
+msgid "爬虫正在运行中..."
+msgstr ""
+
+#: app.py:205
+msgid "读取爬取结果时发生错误"
+msgstr ""
+
+#: app.py:216
+msgid "检查任务状态时发生错误"
+msgstr ""
+
+#: templates/index.html:6 templates/index.html:261
+msgid "网络爬虫"
+msgstr "Web Crawler"
+
+#: templates/index.html:266
+msgid "目标URL"
+msgstr "Target URL"
+
+#: templates/index.html:271
+msgid "爬取深度"
+msgstr "Crawl Depth"
+
+#: templates/index.html:276
+msgid "最大爬取数量"
+msgstr "Maximum Items"
+
+#: templates/index.html:281
+msgid "导出目录"
+msgstr ""
+
+#: templates/index.html:286
+msgid "描述"
+msgstr "Description"
+
+#: templates/index.html:287
+msgid "输入爬取任务描述"
+msgstr "Enter crawl task description"
+
+#: templates/index.html:290 templates/index.html:403 templates/index.html:423
+#: templates/index.html:433 templates/index.html:443
+msgid "开始爬取"
+msgstr "Start Crawling"
+
+#: templates/index.html:295
+msgid "任务状态"
+msgstr ""
+
+#: templates/index.html:311
+msgid "爬取中..."
+msgstr ""
+
+#: templates/index.html:315
+msgid "正在提交爬虫任务..."
+msgstr ""
+
+#: templates/index.html:336
+msgid "成功！"
+msgstr ""
+
+#: templates/index.html:339 templates/index.html:410
+msgid "任务ID"
+msgstr ""
+
+#: templates/index.html:357
+msgid "完成！"
+msgstr ""
+
+#: templates/index.html:357
+msgid "爬虫任务已完成！"
+msgstr ""
+
+#: templates/index.html:368 templates/index.html:391
+msgid "爬取结果"
+msgstr ""
+
+#: templates/index.html:368
+msgid "个项目"
+msgstr ""
+
+#: templates/index.html:373
+msgid "标题"
+msgstr ""
+
+#: templates/index.html:374
+#, fuzzy
+msgid "URL"
+msgstr "Target URL"
+
+#: templates/index.html:380
+msgid "无标题"
+msgstr ""
+
+#: templates/index.html:419 templates/index.html:429 templates/index.html:439
+msgid "错误："
+msgstr ""
+
+#: templates/index.html:419
+msgid "检查任务状态时出错"
+msgstr ""
+
+#: templates/index.html:429
+msgid "提交任务失败"
+msgstr ""
+
+#: templates/index.html:429
+msgid "未知错误"
+msgstr ""
+
+#: templates/index.html:439
+msgid "提交任务时出错"
+msgstr ""
+

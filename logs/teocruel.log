@@ -1,0 +1,54 @@
+2025-12-08 07:01:28,695 - INFO - app - Teocruel application started
+2025-12-08 07:01:35,296 - INFO - app - Teocruel application started
+2025-12-08 07:01:52,009 - INFO - app - Teocruel application started
+2025-12-08 14:05:35,123 - INFO - app - Teocruel application started
+2025-12-08 14:05:35,670 - INFO - app - Teocruel application started
+2025-12-08 14:06:12,694 - INFO - app - Teocruel application started
+2025-12-08 14:12:21,351 - INFO - app - Teocruel application started
+2025-12-08 14:12:21,832 - INFO - app - Teocruel application started
+2025-12-08 14:13:48,794 - INFO - app - User changing language to: en
+2025-12-08 14:13:48,795 - INFO - app - Language changed successfully to: en
+2025-12-08 14:13:49,529 - INFO - app - User changing language to: ja
+2025-12-08 14:13:49,549 - INFO - app - Language changed successfully to: ja
+2025-12-08 14:13:50,314 - INFO - app - User changing language to: fr
+2025-12-08 14:13:50,315 - INFO - app - Language changed successfully to: fr
+2025-12-08 14:13:50,834 - INFO - app - User changing language to: es
+2025-12-08 14:13:50,835 - INFO - app - Language changed successfully to: es
+2025-12-08 14:13:52,225 - INFO - app - User changing language to: ja
+2025-12-08 14:13:52,226 - INFO - app - Language changed successfully to: ja
+2025-12-08 14:13:52,825 - INFO - app - User changing language to: en
+2025-12-08 14:13:52,825 - INFO - app - Language changed successfully to: en
+2025-12-08 14:13:53,433 - INFO - app - User changing language to: zh
+2025-12-08 14:13:53,434 - INFO - app - Language changed successfully to: zh
+2025-12-08 14:14:43,204 - INFO - app - Received spider request for URL: http://www.scmyzx.com.cn/pcweb/index.htm, depth: 1, max_items: 100
+2025-12-08 14:14:43,205 - INFO - app - Generated task ID: a56ff607-8170-46db-81f5-7bbaca07134a for URL: http://www.scmyzx.com.cn/pcweb/index.htm
+2025-12-08 14:14:43,240 - INFO - app - Saved task config to: temp\a56ff607-8170-46db-81f5-7bbaca07134a_config.json
+2025-12-08 14:14:43,241 - INFO - app - Executing spider command: scrapy crawl general_spider -a url="http://www.scmyzx.com.cn/pcweb/index.htm" -a depth=1 -a max_items=100 -o temp\a56ff607-8170-46db-81f5-7bbaca07134a_results.json
+2025-12-08 14:14:43,245 - INFO - app - Spider started successfully for task ID: a56ff607-8170-46db-81f5-7bbaca07134a
+2025-12-08 14:16:39,848 - INFO - app - Teocruel application started
+2025-12-08 14:16:54,429 - INFO - app - Teocruel application started
+2025-12-08 14:17:10,038 - INFO - app - Teocruel application started
+2025-12-08 14:17:29,690 - INFO - app - Teocruel application started
+2025-12-08 14:17:49,292 - INFO - app - Teocruel application started
+2025-12-08 18:39:39,459 - INFO - app - Teocruel application started
+2025-12-08 18:39:39,996 - INFO - app - Teocruel application started
+2025-12-08 18:40:00,465 - INFO - app - User changing language to: en
+2025-12-08 18:40:00,466 - INFO - app - Language changed successfully to: en
+2025-12-08 18:40:01,016 - INFO - app - User changing language to: ja
+2025-12-08 18:40:01,016 - INFO - app - Language changed successfully to: ja
+2025-12-08 18:40:01,695 - INFO - app - User changing language to: fr
+2025-12-08 18:40:01,696 - INFO - app - Language changed successfully to: fr
+2025-12-08 18:40:02,271 - INFO - app - User changing language to: es
+2025-12-08 18:40:02,272 - INFO - app - Language changed successfully to: es
+2025-12-08 18:40:08,927 - INFO - app - User changing language to: fr
+2025-12-08 18:40:08,928 - INFO - app - Language changed successfully to: fr
+2025-12-08 18:40:09,928 - INFO - app - User changing language to: es
+2025-12-08 18:40:09,928 - INFO - app - Language changed successfully to: es
+2025-12-08 18:40:11,359 - INFO - app - User changing language to: ja
+2025-12-08 18:40:11,360 - INFO - app - Language changed successfully to: ja
+2025-12-08 22:12:53,746 - INFO - app - User changing language to: en
+2025-12-08 22:12:53,748 - INFO - app - Language changed successfully to: en
+2025-12-08 22:12:58,644 - INFO - app - User changing language to: ja
+2025-12-08 22:12:58,644 - INFO - app - Language changed successfully to: ja
+2025-12-08 22:13:00,941 - INFO - app - User changing language to: fr
+2025-12-08 22:13:00,941 - INFO - app - Language changed successfully to: fr
