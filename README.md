@@ -201,8 +201,8 @@ MIT License
 ## 联系方式
 
 如有问题或建议，请通过以下方式联系：
-- Email: your.email@example.com
-- GitHub: https://github.com/yourusername/teocruel
+- Email: zhaoceaser@gmail.com
+- GitHub: https://github.com/zbbsdsb/webspide_trocruel
 
 ---
 
